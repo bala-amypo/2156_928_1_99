@@ -13,49 +13,32 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private final Key secretKey;
-    private final long expirationTime;
+    @Value("${jwt.secret}")
+    private String secret;
 
-    public JwtUtil(
-            @Value("${jwt.secret}") String secret,
-            @Value("${jwt.expiration}") long expirationTime) {
+    @Value("${jwt.expiration}")
+    private long expiration;
 
-        this.secretKey = Keys.hmacShaKeyFor(secret.getBytes());
-        this.expirationTime = expirationTime;
+    private Key getSigningKey() {
+        return Keys.hmacShaKeyFor(secret.getBytes());
     }
-
-    /* ================= TOKEN GENERATION ================= */
 
     public String generateToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
-                .signWith(secretKey, SignatureAlgorithm.HS256)
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    /* ================= TOKEN VALIDATION ================= */
-
-    public boolean isTokenValid(String token, String username) {
-        return username.equals(extractUsername(token)) && !isTokenExpired(token);
-    }
-
-    /* ================= CLAIM EXTRACTION ================= */
-
     public String extractUsername(String token) {
-        return extractAllClaims(token).getSubject();
+        return extractClaims(token).getSubject();
     }
 
-    private boolean isTokenExpired(String token) {
-        return extractAllClaims(token)
-                .getExpiration()
-                .before(new Date());
-    }
-
-    private Claims extractAllClaims(String token) {
+    private Claims extractClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(secretKey)
+                .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
