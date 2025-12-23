@@ -15,12 +15,12 @@ public class VendorService {
         this.vendorRepository = vendorRepository;
     }
 
-    // CREATE Vendor
+    // CREATE
     public Vendor save(Vendor vendor) {
         return vendorRepository.save(vendor);
     }
 
-    // READ All Vendors  ✅ (THIS WAS MISSING)
+    // READ
     public List<Vendor> findAll() {
         return vendorRepository.findAll();
     }

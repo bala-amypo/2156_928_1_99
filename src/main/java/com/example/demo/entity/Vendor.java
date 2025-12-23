@@ -10,17 +10,17 @@ public class Vendor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "vendor_name", unique = true, nullable = false)
+    @Column(name = "vendor_name", nullable = false, unique = true)
     private String vendorName;
 
     @Column(name = "contact_email", nullable = false)
     private String contactEmail;
 
-    // Default constructor (required by JPA)
+    // Constructors
     public Vendor() {
     }
 
-    // Getters and Setters
+    // Getters & Setters
     public Long getId() {
         return id;
     }

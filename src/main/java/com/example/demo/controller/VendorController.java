@@ -8,7 +8,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/vendors")
-@CrossOrigin
+@CrossOrigin(origins = "*")
 public class VendorController {
 
     private final VendorService vendorService;
@@ -17,13 +17,13 @@ public class VendorController {
         this.vendorService = vendorService;
     }
 
-    // CREATE Vendor
+    // POST – Create Vendor
     @PostMapping
     public Vendor createVendor(@RequestBody Vendor vendor) {
         return vendorService.save(vendor);
     }
 
-    // READ Vendors
+    // GET – Get All Vendors
     @GetMapping
     public List<Vendor> getAllVendors() {
         return vendorService.findAll();
