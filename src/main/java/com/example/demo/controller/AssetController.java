@@ -8,6 +8,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/assets")
+@CrossOrigin
 public class AssetController {
 
     private final AssetService assetService;
@@ -16,13 +17,15 @@ public class AssetController {
         this.assetService = assetService;
     }
 
+    // CREATE Asset
     @PostMapping
     public Asset createAsset(@RequestBody Asset asset) {
         return assetService.save(asset);
     }
 
+    // READ Assets
     @GetMapping
-    public List<Asset> getAssets() {
+    public List<Asset> getAllAssets() {
         return assetService.findAll();
     }
 }
