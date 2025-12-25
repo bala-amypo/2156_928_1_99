@@ -25,13 +25,12 @@ public class Asset {
     @ManyToOne
     private DepreciationRule depreciationRule;
 
-    @Enumerated(EnumType.STRING)
-    private AssetStatus status;
+    private String status;
 
     private LocalDateTime createdAt;
 
     public Asset() {
-        this.status = AssetStatus.ACTIVE;
+        this.status = "ACTIVE";
         this.createdAt = LocalDateTime.now();
     }
 
@@ -43,7 +42,7 @@ public class Asset {
     public LocalDate getPurchaseDate() { return purchaseDate; }
     public double getPurchaseCost() { return purchaseCost; }
     public DepreciationRule getDepreciationRule() { return depreciationRule; }
-    public AssetStatus getStatus() { return status; }
+    public String getStatus() { return status; }
     public LocalDateTime getCreatedAt() { return createdAt; }
 
     public void setId(Long id) { this.id = id; }
@@ -53,5 +52,5 @@ public class Asset {
     public void setPurchaseDate(LocalDate purchaseDate) { this.purchaseDate = purchaseDate; }
     public void setPurchaseCost(double purchaseCost) { this.purchaseCost = purchaseCost; }
     public void setDepreciationRule(DepreciationRule depreciationRule) { this.depreciationRule = depreciationRule; }
-    public void setStatus(AssetStatus status) { this.status = status; }
+    public void setStatus(String status) { this.status = status; }
 }
