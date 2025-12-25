@@ -1,9 +1,7 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -14,38 +12,49 @@ public class User {
     private Long id;
 
     private String name;
-
-    @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(nullable = false)
-    private String password;
+    @OneToMany(mappedBy = "user")
+    private List<AssetDisposal> disposals;
 
-    private LocalDateTime createdAt;
+    // Constructors
+    public User() {}
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "user_roles",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Set<Role> roles = new HashSet<>();
-
-    public User() {
-        this.createdAt = LocalDateTime.now();
+    public User(String name, String email) {
+        this.name = name;
+        this.email = email;
     }
 
-    // Getters & Setters
-    public Long getId() { return id; }
-    public String getName() { return name; }
-    public String getEmail() { return email; }
-    public String getPassword() { return password; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public Set<Role> getRoles() { return roles; }
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
 
-    public void setId(Long id) { this.id = id; }
-    public void setName(String name) { this.name = name; }
-    public void setEmail(String email) { this.email = email; }
-    public void setPassword(String password) { this.password = password; }
-    public void setRoles(Set<Role> roles) { this.roles = roles; }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public List<AssetDisposal> getDisposals() {
+        return disposals;
+    }
+
+    public void setDisposals(List<AssetDisposal> disposals) {
+        this.disposals = disposals;
+    }
 }

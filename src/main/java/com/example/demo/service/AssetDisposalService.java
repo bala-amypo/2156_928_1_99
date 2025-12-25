@@ -4,7 +4,7 @@ import com.example.demo.entity.AssetDisposal;
 
 public interface AssetDisposalService {
 
-    AssetDisposal requestDisposal(Long assetId, AssetDisposal disposal);
+    AssetDisposal createDisposal(Long userId, AssetDisposal disposalRequest);
 
-    AssetDisposal approveDisposal(Long disposalId, String approvedBy);
+    AssetDisposal updateDisposalStatus(Long disposalId, String status);
 }

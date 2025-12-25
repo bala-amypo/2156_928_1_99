@@ -1,45 +1,62 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "asset_disposals")
 public class AssetDisposal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    private Asset asset;
+    private String status;  // Status of disposal (e.g., PENDING, APPROVED, REJECTED)
 
-    private String disposalMethod;
-    private double disposalValue;
-    private LocalDate disposalDate;
+    private String assetName; // Example field for asset
 
     @ManyToOne
-    private User approvedBy;
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    private LocalDateTime createdAt;
+    // Constructors
+    public AssetDisposal() {}
 
-    public AssetDisposal() {
-        this.createdAt = LocalDateTime.now();
+    public AssetDisposal(String assetName, String status, User user) {
+        this.assetName = assetName;
+        this.status = status;
+        this.user = user;
     }
 
-    // Getters & Setters
-    public Long getId() { return id; }
-    public Asset getAsset() { return asset; }
-    public String getDisposalMethod() { return disposalMethod; }
-    public double getDisposalValue() { return disposalValue; }
-    public LocalDate getDisposalDate() { return disposalDate; }
-    public User getApprovedBy() { return approvedBy; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
 
-    public void setId(Long id) { this.id = id; }
-    public void setAsset(Asset asset) { this.asset = asset; }
-    public void setDisposalMethod(String disposalMethod) { this.disposalMethod = disposalMethod; }
-    public void setDisposalValue(double disposalValue) { this.disposalValue = disposalValue; }
-    public void setDisposalDate(LocalDate disposalDate) { this.disposalDate = disposalDate; }
-    public void setApprovedBy(User approvedBy) { this.approvedBy = approvedBy; }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getAssetName() {
+        return assetName;
+    }
+
+    public void setAssetName(String assetName) {
+        this.assetName = assetName;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
