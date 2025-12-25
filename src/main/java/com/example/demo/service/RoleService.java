@@ -4,7 +4,7 @@ import com.example.demo.entity.Role;
 import com.example.demo.repository.RoleRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
 public class RoleService {
@@ -15,11 +15,7 @@ public class RoleService {
         this.roleRepository = roleRepository;
     }
 
-    public Optional<Role> findByName(String name) {
-        return roleRepository.findByName(name);
-    }
-
-    public Role save(Role role) {
-        return roleRepository.save(role);
+    public List<Role> getAllRoles() {
+        return roleRepository.findAll();
     }
 }
