@@ -1,33 +1,42 @@
-package com.example.demo.controller;
+package com.example.demo.service.impl;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.entity.AssetDisposal;
+import com.example.demo.entity.AssetStatus;
+import com.example.demo.repository.AssetDisposalRepository;
+import com.example.demo.repository.AssetRepository;
 import com.example.demo.service.AssetDisposalService;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/api/disposals")
-public class AssetDisposalController {
+@Service
+@Transactional
+public class AssetDisposalServiceImpl implements AssetDisposalService {
 
-    private final AssetDisposalService disposalService;
+    private final AssetDisposalRepository disposalRepository;
+    private final AssetRepository assetRepository;
 
-    public AssetDisposalController(AssetDisposalService disposalService) {
-        this.disposalService = disposalService;
+    public AssetDisposalServiceImpl(
+            AssetDisposalRepository disposalRepository,
+            AssetRepository assetRepository) {
+        this.disposalRepository = disposalRepository;
+        this.assetRepository = assetRepository;
     }
 
-    @PostMapping("/{assetId}")
-    public AssetDisposal request(
-            @PathVariable Long assetId,
-            @RequestBody AssetDisposal disposal
-    ) {
-        return disposalService.requestDisposal(assetId, disposal);
+    @Override
+    public AssetDisposal requestDisposal(AssetDisposal disposal) {
+        return disposalRepository.save(disposal);
     }
 
-    @PostMapping("/approve/{disposalId}")
-    public AssetDisposal approve(
-            @PathVariable Long disposalId,
-            Authentication authentication
-    ) {
-        return disposalService.approveDisposal(disposalId, authentication.getName());
+    @Override
+    public AssetDisposal approveDisposal(Long id) {
+
+        AssetDisposal disposal = disposalRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Disposal not found"));
+
+        disposal.getAsset().setStatus(AssetStatus.DISPOSED);
+        assetRepository.save(disposal.getAsset());
+
+        return disposal;
     }
 }
