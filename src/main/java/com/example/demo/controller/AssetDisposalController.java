@@ -1,33 +1,30 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.AssetDisposal;
-import com.example.demo.service.AssetDisposalService;
-import org.springframework.security.core.Authentication;
+import com.example.demo.repository.AssetDisposalRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/disposals")
+@RequestMapping("/asset-disposals")
 public class AssetDisposalController {
 
-    private final AssetDisposalService disposalService;
+    private final AssetDisposalRepository repository;
 
-    public AssetDisposalController(AssetDisposalService disposalService) {
-        this.disposalService = disposalService;
+    public AssetDisposalController(AssetDisposalRepository repository) {
+        this.repository = repository;
     }
 
-    @PostMapping("/{assetId}")
-    public AssetDisposal request(
-            @PathVariable Long assetId,
-            @RequestBody AssetDisposal disposal
-    ) {
-        return disposalService.requestDisposal(assetId, disposal);
+    // Request or approve asset disposal
+    @PostMapping
+    public AssetDisposal createDisposal(@RequestBody AssetDisposal disposal) {
+        return repository.save(disposal);
     }
 
-    @PostMapping("/approve/{disposalId}")
-    public AssetDisposal approve(
-            @PathVariable Long disposalId,
-            Authentication authentication
-    ) {
-        return disposalService.approveDisposal(disposalId, authentication.getName());
+    // Get all disposal records
+    @GetMapping
+    public List<AssetDisposal> getAllDisposals() {
+        return repository.findAll();
     }
 }
