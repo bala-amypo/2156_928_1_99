@@ -1,67 +1,45 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "asset_disposals")
 public class AssetDisposal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // SELL, RECYCLE, SCRAP
-    @Column(nullable = false)
-    private String disposalMethod;
-
-    private double disposalValue;
-
-    // PENDING, APPROVED, REJECTED
-    private String approvalStatus = "PENDING";
-
-    private LocalDateTime requestedAt = LocalDateTime.now();
-
-    @ManyToOne
+    @OneToOne
     private Asset asset;
 
-    public Long getId() {
-        return id;
+    private String disposalMethod;
+    private double disposalValue;
+    private LocalDate disposalDate;
+
+    @ManyToOne
+    private User approvedBy;
+
+    private LocalDateTime createdAt;
+
+    public AssetDisposal() {
+        this.createdAt = LocalDateTime.now();
     }
 
-    public String getDisposalMethod() {
-        return disposalMethod;
-    }
+    // Getters & Setters
+    public Long getId() { return id; }
+    public Asset getAsset() { return asset; }
+    public String getDisposalMethod() { return disposalMethod; }
+    public double getDisposalValue() { return disposalValue; }
+    public LocalDate getDisposalDate() { return disposalDate; }
+    public User getApprovedBy() { return approvedBy; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
 
-    public void setDisposalMethod(String disposalMethod) {
-        this.disposalMethod = disposalMethod;
-    }
-
-    public double getDisposalValue() {
-        return disposalValue;
-    }
-
-    public void setDisposalValue(double disposalValue) {
-        this.disposalValue = disposalValue;
-    }
-
-    public String getApprovalStatus() {
-        return approvalStatus;
-    }
-
-    public void setApprovalStatus(String approvalStatus) {
-        this.approvalStatus = approvalStatus;
-    }
-
-    public LocalDateTime getRequestedAt() {
-        return requestedAt;
-    }
-
-    public Asset getAsset() {
-        return asset;
-    }
-
-    public void setAsset(Asset asset) {
-        this.asset = asset;
-    }
+    public void setId(Long id) { this.id = id; }
+    public void setAsset(Asset asset) { this.asset = asset; }
+    public void setDisposalMethod(String disposalMethod) { this.disposalMethod = disposalMethod; }
+    public void setDisposalValue(double disposalValue) { this.disposalValue = disposalValue; }
+    public void setDisposalDate(LocalDate disposalDate) { this.disposalDate = disposalDate; }
+    public void setApprovedBy(User approvedBy) { this.approvedBy = approvedBy; }
 }

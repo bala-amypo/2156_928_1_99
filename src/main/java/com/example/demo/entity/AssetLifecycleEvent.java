@@ -5,53 +5,35 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "asset_lifecycle_events")
 public class AssetLifecycleEvent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // MAINTENANCE, ASSIGNMENT, DISPOSAL_REQUEST
-    @Column(nullable = false)
-    private String eventType;
-
-    private LocalDate eventDate;
-
-    private LocalDateTime loggedAt = LocalDateTime.now();
-
     @ManyToOne
     private Asset asset;
 
-    public Long getId() {
-        return id;
+    private String eventType;
+    private String eventDescription;
+    private LocalDate eventDate;
+    private LocalDateTime loggedAt;
+
+    public AssetLifecycleEvent() {
+        this.loggedAt = LocalDateTime.now();
     }
 
-    public String getEventType() {
-        return eventType;
-    }
+    // Getters & Setters
+    public Long getId() { return id; }
+    public Asset getAsset() { return asset; }
+    public String getEventType() { return eventType; }
+    public String getEventDescription() { return eventDescription; }
+    public LocalDate getEventDate() { return eventDate; }
+    public LocalDateTime getLoggedAt() { return loggedAt; }
 
-    public void setEventType(String eventType) {
-        this.eventType = eventType;
-    }
-
-    public LocalDate getEventDate() {
-        return eventDate;
-    }
-
-    public void setEventDate(LocalDate eventDate) {
-        this.eventDate = eventDate;
-    }
-
-    public LocalDateTime getLoggedAt() {
-        return loggedAt;
-    }
-
-    public Asset getAsset() {
-        return asset;
-    }
-
-    public void setAsset(Asset asset) {
-        this.asset = asset;
-    }
+    public void setId(Long id) { this.id = id; }
+    public void setAsset(Asset asset) { this.asset = asset; }
+    public void setEventType(String eventType) { this.eventType = eventType; }
+    public void setEventDescription(String eventDescription) { this.eventDescription = eventDescription; }
+    public void setEventDate(LocalDate eventDate) { this.eventDate = eventDate; }
 }
