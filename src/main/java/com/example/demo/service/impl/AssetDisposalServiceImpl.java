@@ -3,8 +3,8 @@ package com.example.demo.service.impl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.entity.Asset;
 import com.example.demo.entity.AssetDisposal;
-import com.example.demo.entity.AssetStatus;
 import com.example.demo.repository.AssetDisposalRepository;
 import com.example.demo.repository.AssetRepository;
 import com.example.demo.service.AssetDisposalService;
@@ -23,20 +23,33 @@ public class AssetDisposalServiceImpl implements AssetDisposalService {
         this.assetRepository = assetRepository;
     }
 
+    // REQUEST DISPOSAL
     @Override
-    public AssetDisposal requestDisposal(AssetDisposal disposal) {
+    public AssetDisposal requestDisposal(Long assetId, AssetDisposal disposal) {
+
+        Asset asset = assetRepository.findById(assetId)
+                .orElseThrow(() -> new RuntimeException("Asset not found"));
+
+        disposal.setAsset(asset);
+        disposal.setStatus("REQUESTED");
+
         return disposalRepository.save(disposal);
     }
 
+    // APPROVE DISPOSAL
     @Override
-    public AssetDisposal approveDisposal(Long id) {
+    public AssetDisposal approveDisposal(Long disposalId, String approvedBy) {
 
-        AssetDisposal disposal = disposalRepository.findById(id)
+        AssetDisposal disposal = disposalRepository.findById(disposalId)
                 .orElseThrow(() -> new RuntimeException("Disposal not found"));
 
-        disposal.getAsset().setStatus(AssetStatus.DISPOSED);
-        assetRepository.save(disposal.getAsset());
+        disposal.setApprovedBy(approvedBy);
+        disposal.setStatus("APPROVED");
 
-        return disposal;
+        Asset asset = disposal.getAsset();
+        asset.setStatus("DISPOSED");
+
+        assetRepository.save(asset);
+        return disposalRepository.save(disposal);
     }
 }
