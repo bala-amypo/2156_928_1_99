@@ -1,28 +1,41 @@
-package com.example.demo.service.impl;
+package com.example.demo.service;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.entity.AssetDisposal;
+import com.example.demo.entity.AssetStatus;
 import com.example.demo.repository.AssetDisposalRepository;
-import com.example.demo.service.AssetDisposalService;
-import org.springframework.stereotype.Service;
+import com.example.demo.repository.AssetRepository;
 
 @Service
+@Transactional
 public class AssetDisposalServiceImpl implements AssetDisposalService {
 
     private final AssetDisposalRepository disposalRepository;
+    private final AssetRepository assetRepository;
 
-    public AssetDisposalServiceImpl(AssetDisposalRepository disposalRepository) {
+    public AssetDisposalServiceImpl(
+            AssetDisposalRepository disposalRepository,
+            AssetRepository assetRepository) {
         this.disposalRepository = disposalRepository;
+        this.assetRepository = assetRepository;
     }
 
     @Override
-    public AssetDisposal requestDisposal(Long assetId, AssetDisposal disposal) {
+    public AssetDisposal requestDisposal(AssetDisposal disposal) {
         return disposalRepository.save(disposal);
     }
 
     @Override
-    public AssetDisposal approveDisposal(Long disposalId, String approverEmail) {
-        AssetDisposal disposal = disposalRepository.findById(disposalId)
+    public AssetDisposal approveDisposal(Long id) {
+
+        AssetDisposal disposal = disposalRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Disposal not found"));
-        return disposalRepository.save(disposal);
+
+        disposal.getAsset().setStatus(AssetStatus.DISPOSED);
+        assetRepository.save(disposal.getAsset());
+
+        return disposal;
     }
 }
