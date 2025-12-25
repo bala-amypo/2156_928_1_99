@@ -1,9 +1,10 @@
-    package com.example.demo.dto;
+package com.example.demo.dto;
 
 public class AuthResponse {
 
     private String token;
-    private String type = "Bearer";
+
+    public AuthResponse() {}
 
     public AuthResponse(String token) {
         this.token = token;
@@ -13,7 +14,7 @@ public class AuthResponse {
         return token;
     }
 
-    public String getType() {
-        return type;
+    public void setToken(String token) {
+        this.token = token;
     }
 }

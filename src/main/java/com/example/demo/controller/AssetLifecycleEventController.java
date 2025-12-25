@@ -1,30 +1,31 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.AssetLifecycleEvent;
-import com.example.demo.repository.AssetLifecycleEventRepository;
+import com.example.demo.service.AssetLifecycleEventService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/asset-events")
+@RequestMapping("/api/events")
 public class AssetLifecycleEventController {
 
-    private final AssetLifecycleEventRepository repository;
+    private final AssetLifecycleEventService eventService;
 
-    public AssetLifecycleEventController(AssetLifecycleEventRepository repository) {
-        this.repository = repository;
+    public AssetLifecycleEventController(AssetLifecycleEventService eventService) {
+        this.eventService = eventService;
     }
 
-    // Log a lifecycle event (maintenance / assignment / disposal request)
-    @PostMapping
-    public AssetLifecycleEvent createEvent(@RequestBody AssetLifecycleEvent event) {
-        return repository.save(event);
+    @PostMapping("/{assetId}")
+    public AssetLifecycleEvent log(
+            @PathVariable Long assetId,
+            @RequestBody AssetLifecycleEvent event
+    ) {
+        return eventService.logEvent(assetId, event);
     }
 
-    // Get all lifecycle events
-    @GetMapping
-    public List<AssetLifecycleEvent> getAllEvents() {
-        return repository.findAll();
+    @GetMapping("/{assetId}")
+    public List<AssetLifecycleEvent> getByAsset(@PathVariable Long assetId) {
+        return eventService.getEventsByAsset(assetId);
     }
 }

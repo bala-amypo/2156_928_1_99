@@ -1,14 +1,14 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Asset;
+import com.example.demo.entity.AssetStatus;
 import com.example.demo.service.AssetService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/assets")
-@CrossOrigin
+@RequestMapping("/api/assets")
 public class AssetController {
 
     private final AssetService assetService;
@@ -17,15 +17,27 @@ public class AssetController {
         this.assetService = assetService;
     }
 
-    // CREATE Asset
-    @PostMapping
-    public Asset createAsset(@RequestBody Asset asset) {
-        return assetService.save(asset);
+    @PostMapping("/{vendorId}/{ruleId}")
+    public Asset create(
+            @PathVariable Long vendorId,
+            @PathVariable Long ruleId,
+            @RequestBody Asset asset
+    ) {
+        return assetService.createAsset(vendorId, ruleId, asset);
     }
 
-    // READ Assets
     @GetMapping
-    public List<Asset> getAllAssets() {
-        return assetService.findAll();
+    public List<Asset> getAll() {
+        return assetService.getAllAssets();
+    }
+
+    @GetMapping("/{id}")
+    public Asset getById(@PathVariable Long id) {
+        return assetService.getAssetById(id);
+    }
+
+    @GetMapping("/status/{status}")
+    public List<Asset> byStatus(@PathVariable AssetStatus status) {
+        return assetService.getAssetsByStatus(status);
     }
 }

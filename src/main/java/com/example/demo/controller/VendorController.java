@@ -7,8 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/vendors")
-@CrossOrigin(origins = "*")
+@RequestMapping("/api/vendors")
 public class VendorController {
 
     private final VendorService vendorService;
@@ -17,15 +16,13 @@ public class VendorController {
         this.vendorService = vendorService;
     }
 
-    // POST – Create Vendor
     @PostMapping
-    public Vendor createVendor(@RequestBody Vendor vendor) {
-        return vendorService.save(vendor);
+    public Vendor create(@RequestBody Vendor vendor) {
+        return vendorService.createVendor(vendor);
     }
 
-    // GET – Get All Vendors
     @GetMapping
-    public List<Vendor> getAllVendors() {
-        return vendorService.findAll();
+    public List<Vendor> getAll() {
+        return vendorService.getAllVendors();
     }
 }
