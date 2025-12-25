@@ -1,38 +1,25 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.Asset;
-import com.example.demo.entity.DepreciationRule;
-import com.example.demo.entity.Vendor;
-import com.example.demo.repository.AssetRepository;
-import com.example.demo.repository.DepreciationRuleRepository;
-import com.example.demo.repository.VendorRepository;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.example.demo.entity.Asset;
+import com.example.demo.entity.AssetStatus;
+import com.example.demo.repository.AssetRepository;
 
 @Service
 public class AssetServiceImpl implements AssetService {
 
     private final AssetRepository assetRepository;
-    private final VendorRepository vendorRepository;
-    private final DepreciationRuleRepository depreciationRuleRepository;
 
-    public AssetServiceImpl(AssetRepository assetRepository, 
-                           VendorRepository vendorRepository,
-                           DepreciationRuleRepository depreciationRuleRepository) {
+    public AssetServiceImpl(AssetRepository assetRepository) {
         this.assetRepository = assetRepository;
-        this.vendorRepository = vendorRepository;
-        this.depreciationRuleRepository = depreciationRuleRepository;
     }
 
     @Override
-    public Asset createAsset(Long vendorId, Long ruleId, Asset asset) {
-        Vendor vendor = vendorRepository.findById(vendorId).orElse(null);
-        DepreciationRule rule = depreciationRuleRepository.findById(ruleId).orElse(null);
-        
-        asset.setVendor(vendor);
-        asset.setDepreciationRule(rule);
-        
+    public Asset createAsset(Asset asset) {
+        asset.setStatus(AssetStatus.ACTIVE);
         return assetRepository.save(asset);
     }
 
@@ -43,11 +30,14 @@ public class AssetServiceImpl implements AssetService {
 
     @Override
     public Asset getAssetById(Long id) {
-        return assetRepository.findById(id).orElse(null);
+        return assetRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Asset not found"));
     }
 
     @Override
     public List<Asset> getAssetsByStatus(String status) {
-        return assetRepository.findByStatus(status);
+        return assetRepository.findByStatus(
+                AssetStatus.valueOf(status.toUpperCase())
+        );
     }
 }
