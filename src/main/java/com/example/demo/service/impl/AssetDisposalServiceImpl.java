@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -7,6 +7,7 @@ import com.example.demo.entity.AssetDisposal;
 import com.example.demo.entity.AssetStatus;
 import com.example.demo.repository.AssetDisposalRepository;
 import com.example.demo.repository.AssetRepository;
+import com.example.demo.service.AssetDisposalService;
 
 @Service
 @Transactional
