@@ -3,7 +3,8 @@ package com.example.demo.repository;
 import com.example.demo.entity.Asset;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface AssetRepository extends JpaRepository<Asset, Long> {
+import java.util.List;
 
-    boolean existsByAssetTag(String assetTag);
+public interface AssetRepository extends JpaRepository<Asset, Long> {
+    List<Asset> findByStatus(String status);
 }
