@@ -1,8 +1,12 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.AssetDisposal;
+import org.springframework.stereotype.Service;
 
-public interface AssetDisposalService {
-    AssetDisposal requestDisposal(Long assetId, AssetDisposal disposal);
-    AssetDisposal approveDisposal(Long disposalId, String approverEmail);
+@Service
+public class AssetDisposalService {
+
+    public String disposeAsset(Long assetId, String reason) {
+        // business logic placeholder
+        return "Asset " + assetId + " disposed successfully. Reason: " + reason;
+    }
 }
