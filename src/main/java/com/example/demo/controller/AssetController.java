@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Asset;
-import com.example.demo.entity.AssetStatus;
 import com.example.demo.service.AssetService;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +36,7 @@ public class AssetController {
     }
 
     @GetMapping("/status/{status}")
-    public List<Asset> byStatus(@PathVariable AssetStatus status) {
+    public List<Asset> byStatus(@PathVariable String status) {
         return assetService.getAssetsByStatus(status);
     }
 }

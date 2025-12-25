@@ -1,17 +1,13 @@
-spring.application.name=sql
-# Don't change the port
-server.port = 9001
-# for https
-server.forward-headers-strategy=framework 
+package com.example.demo;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-spring.datasource.url=jdbc:mysql://localhost:3306/transport_pro?createDatabaseIfNotExist=true
+@SpringBootApplication
+public class DemoApplication {
 
-spring.datasource.username=root
-spring.datasource.password=Amypo
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+	public static void main(String[] args) {
+		SpringApplication.run(DemoApplication.class, args);
+	}
 
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.format_sql=true
-spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
+}
