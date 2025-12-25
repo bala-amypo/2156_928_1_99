@@ -1,9 +1,11 @@
 package com.example.demo.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import com.example.demo.entity.AssetDisposal;
 import com.example.demo.service.AssetDisposalService;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/disposals")
@@ -15,19 +17,15 @@ public class AssetDisposalController {
         this.disposalService = disposalService;
     }
 
-    @PostMapping("/{assetId}")
-    public AssetDisposal request(
-            @PathVariable Long assetId,
-            @RequestBody AssetDisposal disposal
-    ) {
-        return disposalService.requestDisposal(assetId, disposal);
+    @PostMapping
+    public ResponseEntity<AssetDisposal> create(@RequestBody AssetDisposal disposal) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(disposalService.requestDisposal(disposal));
     }
 
-    @PostMapping("/approve/{disposalId}")
-    public AssetDisposal approve(
-            @PathVariable Long disposalId,
-            Authentication authentication
-    ) {
-        return disposalService.approveDisposal(disposalId, authentication.getName());
+    @PostMapping("/{id}/approve")
+    public ResponseEntity<AssetDisposal> approve(@PathVariable Long id) {
+        return ResponseEntity.ok(disposalService.approveDisposal(id));
     }
 }

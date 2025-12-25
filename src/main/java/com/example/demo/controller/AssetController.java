@@ -1,10 +1,13 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.Asset;
-import com.example.demo.service.AssetService;
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import com.example.demo.entity.Asset;
+import com.example.demo.service.AssetService;
 
 @RestController
 @RequestMapping("/api/assets")
@@ -16,27 +19,25 @@ public class AssetController {
         this.assetService = assetService;
     }
 
-    @PostMapping("/{vendorId}/{ruleId}")
-    public Asset create(
-            @PathVariable Long vendorId,
-            @PathVariable Long ruleId,
-            @RequestBody Asset asset
-    ) {
-        return assetService.createAsset(vendorId, ruleId, asset);
+    @PostMapping
+    public ResponseEntity<Asset> create(@RequestBody Asset asset) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(assetService.createAsset(asset));
     }
 
     @GetMapping
-    public List<Asset> getAll() {
-        return assetService.getAllAssets();
+    public ResponseEntity<List<Asset>> getAll() {
+        return ResponseEntity.ok(assetService.getAllAssets());
     }
 
     @GetMapping("/{id}")
-    public Asset getById(@PathVariable Long id) {
-        return assetService.getAssetById(id);
+    public ResponseEntity<Asset> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(assetService.getAssetById(id));
     }
 
     @GetMapping("/status/{status}")
-    public List<Asset> byStatus(@PathVariable String status) {
-        return assetService.getAssetsByStatus(status);
+    public ResponseEntity<List<Asset>> getByStatus(@PathVariable String status) {
+        return ResponseEntity.ok(assetService.getAssetsByStatus(status));
     }
 }
