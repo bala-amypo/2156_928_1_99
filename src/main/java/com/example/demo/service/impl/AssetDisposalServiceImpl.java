@@ -1,44 +1,33 @@
-package com.example.demo.service.impl;
+package com.example.demo.controller;
 
-import com.example.demo.entity.Asset;
 import com.example.demo.entity.AssetDisposal;
-import com.example.demo.entity.User;
-import com.example.demo.repository.AssetDisposalRepository;
-import com.example.demo.repository.AssetRepository;
-import com.example.demo.repository.UserRepository;
 import com.example.demo.service.AssetDisposalService;
-import org.springframework.stereotype.Service;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
-@Service
-public class AssetDisposalServiceImpl implements AssetDisposalService {
+@RestController
+@RequestMapping("/api/disposals")
+public class AssetDisposalController {
 
-    private final AssetDisposalRepository disposalRepository;
-    private final AssetRepository assetRepository;
-    private final UserRepository userRepository;
+    private final AssetDisposalService disposalService;
 
-    public AssetDisposalServiceImpl(AssetDisposalRepository disposalRepository,
-                                   AssetRepository assetRepository,
-                                   UserRepository userRepository) {
-        this.disposalRepository = disposalRepository;
-        this.assetRepository = assetRepository;
-        this.userRepository = userRepository;
+    public AssetDisposalController(AssetDisposalService disposalService) {
+        this.disposalService = disposalService;
     }
 
-    @Override
-    public AssetDisposal requestDisposal(Long assetId, AssetDisposal disposal) {
-        Asset asset = assetRepository.findById(assetId)
-                .orElseThrow(() -> new RuntimeException("Asset not found"));
-        disposal.setAsset(asset);
-        return disposalRepository.save(disposal);
+    @PostMapping("/{assetId}")
+    public AssetDisposal request(
+            @PathVariable Long assetId,
+            @RequestBody AssetDisposal disposal
+    ) {
+        return disposalService.requestDisposal(assetId, disposal);
     }
 
-    @Override
-    public AssetDisposal approveDisposal(Long disposalId, String approverEmail) {
-        AssetDisposal disposal = disposalRepository.findById(disposalId)
-                .orElseThrow(() -> new RuntimeException("Disposal not found"));
-        User approver = userRepository.findByEmail(approverEmail)
-                .orElseThrow(() -> new RuntimeException("Approver not found"));
-        disposal.setApprovedBy(approver);
-        return disposalRepository.save(disposal);
+    @PostMapping("/approve/{disposalId}")
+    public AssetDisposal approve(
+            @PathVariable Long disposalId,
+            Authentication authentication
+    ) {
+        return disposalService.approveDisposal(disposalId, authentication.getName());
     }
 }
