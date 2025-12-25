@@ -1,30 +1,42 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.AssetDisposal;
-import com.example.demo.repository.AssetDisposalRepository;
+import com.example.demo.service.AssetDisposalService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/asset-disposals")
+@RequestMapping("/assetDisposals")
 public class AssetDisposalController {
 
-    private final AssetDisposalRepository repository;
+    @Autowired
+    private AssetDisposalService disposalService;
 
-    public AssetDisposalController(AssetDisposalRepository repository) {
-        this.repository = repository;
+    // Create a new disposal for a user
+    @PostMapping("/user/{userId}")
+    public ResponseEntity<AssetDisposal> createDisposal(
+            @PathVariable Long userId,
+            @RequestBody AssetDisposal disposalRequest
+    ) {
+        AssetDisposal savedDisposal = disposalService.createDisposal(userId, disposalRequest);
+        return ResponseEntity.ok(savedDisposal);
     }
 
-    // Request or approve asset disposal
-    @PostMapping
-    public AssetDisposal createDisposal(@RequestBody AssetDisposal disposal) {
-        return repository.save(disposal);
+    // Update status of a disposal
+    @PutMapping("/{disposalId}/status")
+    public ResponseEntity<AssetDisposal> updateDisposalStatus(
+            @PathVariable Long disposalId,
+            @RequestParam String status
+    ) {
+        AssetDisposal updatedDisposal = disposalService.updateDisposalStatus(disposalId, status);
+        return ResponseEntity.ok(updatedDisposal);
     }
 
-    // Get all disposal records
-    @GetMapping
-    public List<AssetDisposal> getAllDisposals() {
-        return repository.findAll();
+    // Optional: Get disposal by ID
+    @GetMapping("/{disposalId}")
+    public ResponseEntity<AssetDisposal> getDisposal(@PathVariable Long disposalId) {
+        AssetDisposal disposal = disposalService.updateDisposalStatus(disposalId, null); // or create a findById method
+        return ResponseEntity.ok(disposal);
     }
 }

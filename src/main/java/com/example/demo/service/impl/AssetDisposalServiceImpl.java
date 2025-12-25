@@ -1,14 +1,4 @@
-package com.example.demo.service.impl;
-
-import com.example.demo.entity.AssetDisposal;
-import com.example.demo.entity.User;
-import com.example.demo.repository.AssetDisposalRepository;
-import com.example.demo.repository.UserRepository;
-import com.example.demo.service.AssetDisposalService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AssetDisposalServiceImpl implements AssetDisposalService {
@@ -20,17 +10,19 @@ public class AssetDisposalServiceImpl implements AssetDisposalService {
     private UserRepository userRepository;
 
     @Override
+    @Transactional
     public AssetDisposal createDisposal(Long userId, AssetDisposal disposalRequest) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         disposalRequest.setUser(user);
-        disposalRequest.setStatus("PENDING"); // default status
+        disposalRequest.setStatus("PENDING");
 
         return disposalRepository.save(disposalRequest);
     }
 
     @Override
+    @Transactional
     public AssetDisposal updateDisposalStatus(Long disposalId, String status) {
         AssetDisposal disposal = disposalRepository.findById(disposalId)
                 .orElseThrow(() -> new RuntimeException("Disposal not found"));
