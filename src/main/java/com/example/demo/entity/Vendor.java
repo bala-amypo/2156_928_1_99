@@ -1,43 +1,38 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "vendors")
 public class Vendor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "vendor_name", nullable = false, unique = true)
+    @Column(unique = true, nullable = false)
     private String vendorName;
 
-    @Column(name = "contact_email", nullable = false)
+    @Column(nullable = false)
     private String contactEmail;
 
-    // Constructors
+    private String phone;
+
+    private LocalDateTime createdAt;
+
     public Vendor() {
+        this.createdAt = LocalDateTime.now();
     }
 
     // Getters & Setters
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public String getVendorName() { return vendorName; }
+    public String getContactEmail() { return contactEmail; }
+    public String getPhone() { return phone; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
 
-    public String getVendorName() {
-        return vendorName;
-    }
-
-    public void setVendorName(String vendorName) {
-        this.vendorName = vendorName;
-    }
-
-    public String getContactEmail() {
-        return contactEmail;
-    }
-
-    public void setContactEmail(String contactEmail) {
-        this.contactEmail = contactEmail;
-    }
+    public void setId(Long id) { this.id = id; }
+    public void setVendorName(String vendorName) { this.vendorName = vendorName; }
+    public void setContactEmail(String contactEmail) { this.contactEmail = contactEmail; }
+    public void setPhone(String phone) { this.phone = phone; }
 }
