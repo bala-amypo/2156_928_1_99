@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface DepreciationRuleRepository extends JpaRepository<DepreciationRule, Long> {
 
     Optional<DepreciationRule> findByAssetType(String assetType);
+    Optional<DepreciationRule> findByRuleName(String ruleName);
 }

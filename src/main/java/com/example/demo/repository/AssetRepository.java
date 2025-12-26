@@ -9,4 +9,6 @@ import java.util.List;
 public interface AssetRepository extends JpaRepository<Asset, Long> {
 
     List<Asset> findByVendor(Vendor vendor);
+    boolean existsByAssetTag(String assetTag);
+    List<Asset> findByStatus(String status);
 }
