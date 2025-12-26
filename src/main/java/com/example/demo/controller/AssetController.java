@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,78 +21,42 @@ public class AssetController {
     @Autowired
     private VendorRepository vendorRepository;
 
-    // CREATE asset
     @PostMapping
-    public ResponseEntity<?> createAsset(@RequestBody Asset asset) {
+    public Asset createAsset(@RequestBody Asset asset) {
 
-        if (asset.getVendor() != null &&
-            asset.getVendor().getVendorName() != null) {
-
+        if (asset.getVendor() != null && asset.getVendor().getName() != null) {
             Vendor vendor = vendorRepository
-                    .findByVendorName(asset.getVendor().getVendorName())
-                    .orElseThrow(() ->
-                            new RuntimeException("Vendor not found"));
-
+                    .findByName(asset.getVendor().getName())
+                    .orElseThrow(() -> new RuntimeException("Vendor not found"));
             asset.setVendor(vendor);
         }
 
-        Asset savedAsset = assetRepository.save(asset);
-        return new ResponseEntity<>(savedAsset, HttpStatus.CREATED);
+        return assetRepository.save(asset);
     }
 
-    // GET all assets
     @GetMapping
-    public ResponseEntity<List<Asset>> getAllAssets() {
-        return ResponseEntity.ok(assetRepository.findAll());
+    public List<Asset> getAllAssets() {
+        return assetRepository.findAll();
     }
 
-    // GET asset by ID
-    @GetMapping("/{id}")
-    public ResponseEntity<Asset> getAssetById(@PathVariable Long id) {
+    @PutMapping("/{id}")
+    public Asset updateAsset(@PathVariable Long id,
+                             @RequestBody Asset updatedAsset) {
 
         Asset asset = assetRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Asset not found"));
 
-        return ResponseEntity.ok(asset);
+        asset.setName(updatedAsset.getName());
+        asset.setPurchaseDate(updatedAsset.getPurchaseDate());
+        asset.setCost(updatedAsset.getCost());
+        asset.setStatus(updatedAsset.getStatus());
+
+        return assetRepository.save(asset);
     }
 
-    // UPDATE asset
-    @PutMapping("/{id}")
-    public ResponseEntity<Asset> updateAsset(
-            @PathVariable Long id,
-            @RequestBody Asset updatedAsset) {
-
-        Asset existingAsset = assetRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Asset not found"));
-
-        existingAsset.setAssetName(updatedAsset.getAssetName());
-        existingAsset.setPurchaseDate(updatedAsset.getPurchaseDate());
-        existingAsset.setCost(updatedAsset.getCost());
-        existingAsset.setStatus(updatedAsset.getStatus());
-
-        if (updatedAsset.getVendor() != null &&
-            updatedAsset.getVendor().getVendorName() != null) {
-
-            Vendor vendor = vendorRepository
-                    .findByVendorName(updatedAsset.getVendor().getVendorName())
-                    .orElseThrow(() ->
-                            new RuntimeException("Vendor not found"));
-
-            existingAsset.setVendor(vendor);
-        }
-
-        return ResponseEntity.ok(assetRepository.save(existingAsset));
-    }
-
-    // DELETE asset
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteAsset(@PathVariable Long id) {
-
-        if (!assetRepository.existsById(id)) {
-            throw new RuntimeException("Asset not found");
-        }
-
         assetRepository.deleteById(id);
-        return ResponseEntity.ok("Asset deleted successfully");
+        return ResponseEntity.ok("Asset deleted");
     }
 }

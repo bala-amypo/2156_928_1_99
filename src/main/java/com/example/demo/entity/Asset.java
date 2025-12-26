@@ -1,72 +1,55 @@
 package com.example.demo.entity;
 
+import java.time.LocalDate;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "assets")
 public class Asset {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    private String assetTag;
-
-    private String name;
-    private Double purchaseCost;
+    private String name;          // NOT assetName
+    private LocalDate purchaseDate;
+    private double cost;
     private String status;
 
     @ManyToOne
+    @JoinColumn(name = "vendor_id")
     private Vendor vendor;
 
-    @ManyToOne
-    private DepreciationRule depreciationRule;
-
     // getters and setters
-
     public Long getId() {
         return id;
     }
 
-    public String getAssetTag() {
-        return assetTag;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setAssetTag(String assetTag) {
-        this.assetTag = assetTag;
-    }
-
-    public String getName() {
+    public String getName() {     // NOT getAssetName()
         return name;
-    }
-
-    public Double getPurchaseCost() {
-        return purchaseCost;
-    }
-
-    public void setPurchaseCost(Double purchaseCost) {
-        this.purchaseCost = purchaseCost;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public Vendor getVendor() {
-        return vendor;
+    public LocalDate getPurchaseDate() {
+        return purchaseDate;
     }
 
-    public void setVendor(Vendor vendor) {
-        this.vendor = vendor;
+    public void setPurchaseDate(LocalDate purchaseDate) {
+        this.purchaseDate = purchaseDate;
     }
 
-    public DepreciationRule getDepreciationRule() {
-        return depreciationRule;
+    public double getCost() {
+        return cost;
     }
 
-    public void setDepreciationRule(DepreciationRule depreciationRule) {
-        this.depreciationRule = depreciationRule;
+    public void setCost(double cost) {
+        this.cost = cost;
     }
 
     public String getStatus() {
@@ -75,5 +58,13 @@ public class Asset {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Vendor getVendor() {
+        return vendor;
+    }
+
+    public void setVendor(Vendor vendor) {
+        this.vendor = vendor;
     }
 }
