@@ -19,7 +19,10 @@ public class DepreciationRule {
     @Column(nullable = false)
     private int usefulLifeYears;
 
-    // ===== Getters and Setters =====
+    @Column(nullable = false)
+    private double salvageValue;
+
+    // ===== Getters & Setters =====
 
     public Long getId() {
         return id;
@@ -51,5 +54,13 @@ public class DepreciationRule {
 
     public void setUsefulLifeYears(int usefulLifeYears) {
         this.usefulLifeYears = usefulLifeYears;
+    }
+
+    public double getSalvageValue() {
+        return salvageValue;
+    }
+
+    public void setSalvageValue(double salvageValue) {
+        this.salvageValue = salvageValue;
     }
 }
