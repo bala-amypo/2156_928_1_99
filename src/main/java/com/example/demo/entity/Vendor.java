@@ -1,49 +1,31 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.util.List;
 
 @Entity
-@Table(name = "vendors")
 public class Vendor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String vendorName;
-    private String contactEmail;
+    private String name;
 
-    @OneToMany(mappedBy = "vendor")
-    private List<Asset> assets;
+    // ===== GETTERS & SETTERS =====
 
-    // ===== Required Aliases =====
-    public String getName() {
-        return vendorName;
-    }
-
-    public void setName(String name) {
-        this.vendorName = name;
-    }
-
-    // ===== Normal Getters =====
     public Long getId() {
         return id;
     }
 
-    public String getVendorName() {
-        return vendorName;
+    public String getName() {
+        return name;
     }
 
-    public void setVendorName(String vendorName) {
-        this.vendorName = vendorName;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getContactEmail() {
-        return contactEmail;
-    }
-
-    public void setContactEmail(String contactEmail) {
-        this.contactEmail = contactEmail;
+    public void setName(String name) {
+        this.name = name;
     }
 }
