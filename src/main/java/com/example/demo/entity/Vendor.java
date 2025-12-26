@@ -11,22 +11,24 @@ public class Vendor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
     private String vendorName;
-
     private String contactEmail;
 
     @OneToMany(mappedBy = "vendor")
     private List<Asset> assets;
 
-    // ===== Getters & Setters =====
-
-    public Long getId() {
-        return id;
+    // ===== Required Aliases =====
+    public String getName() {
+        return vendorName;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setName(String name) {
+        this.vendorName = name;
+    }
+
+    // ===== Normal Getters =====
+    public Long getId() {
+        return id;
     }
 
     public String getVendorName() {
@@ -43,13 +45,5 @@ public class Vendor {
 
     public void setContactEmail(String contactEmail) {
         this.contactEmail = contactEmail;
-    }
-
-    public List<Asset> getAssets() {
-        return assets;
-    }
-
-    public void setAssets(List<Asset> assets) {
-        this.assets = assets;
     }
 }

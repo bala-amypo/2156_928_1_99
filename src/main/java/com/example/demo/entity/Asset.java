@@ -2,7 +2,6 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Table(name = "assets")
@@ -12,36 +11,30 @@ public class Asset {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
     private String assetTag;
-
     private String assetName;
-
-    private LocalDate purchaseDate;
-
     private double purchaseCost;
-
+    private LocalDate purchaseDate;
     private String status = "ACTIVE";
 
     @ManyToOne
-    @JoinColumn(name = "vendor_id")
     private Vendor vendor;
 
     @ManyToOne
-    @JoinColumn(name = "rule_id")
     private DepreciationRule depreciationRule;
 
-    @OneToMany(mappedBy = "asset")
-    private List<AssetLifecycleEvent> lifecycleEvents;
-
-    // ===== Getters & Setters =====
-
-    public Long getId() {
-        return id;
+    // ===== ALIASES REQUIRED =====
+    public String getName() {
+        return assetName;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public double getCost() {
+        return purchaseCost;
+    }
+
+    // ===== Normal Getters & Setters =====
+    public Long getId() {
+        return id;
     }
 
     public String getAssetTag() {
@@ -60,28 +53,12 @@ public class Asset {
         this.assetName = assetName;
     }
 
-    public LocalDate getPurchaseDate() {
-        return purchaseDate;
-    }
-
-    public void setPurchaseDate(LocalDate purchaseDate) {
-        this.purchaseDate = purchaseDate;
-    }
-
     public double getPurchaseCost() {
         return purchaseCost;
     }
 
     public void setPurchaseCost(double purchaseCost) {
         this.purchaseCost = purchaseCost;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public Vendor getVendor() {
@@ -98,13 +75,5 @@ public class Asset {
 
     public void setDepreciationRule(DepreciationRule depreciationRule) {
         this.depreciationRule = depreciationRule;
-    }
-
-    public List<AssetLifecycleEvent> getLifecycleEvents() {
-        return lifecycleEvents;
-    }
-
-    public void setLifecycleEvents(List<AssetLifecycleEvent> lifecycleEvents) {
-        this.lifecycleEvents = lifecycleEvents;
     }
 }

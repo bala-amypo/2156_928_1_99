@@ -1,7 +1,6 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "depreciation_rules")
@@ -11,22 +10,15 @@ public class DepreciationRule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
     private String ruleName;
-
-    private String method;
-
-    @OneToMany(mappedBy = "depreciationRule")
-    private List<Asset> assets;
+    private String assetType;
+    private double rate;
+    private double salvageValue;
 
     // ===== Getters & Setters =====
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getRuleName() {
@@ -37,19 +29,27 @@ public class DepreciationRule {
         this.ruleName = ruleName;
     }
 
-    public String getMethod() {
-        return method;
+    public String getAssetType() {
+        return assetType;
     }
 
-    public void setMethod(String method) {
-        this.method = method;
+    public void setAssetType(String assetType) {
+        this.assetType = assetType;
     }
 
-    public List<Asset> getAssets() {
-        return assets;
+    public double getRate() {
+        return rate;
     }
 
-    public void setAssets(List<Asset> assets) {
-        this.assets = assets;
+    public void setRate(double rate) {
+        this.rate = rate;
+    }
+
+    public double getSalvageValue() {
+        return salvageValue;
+    }
+
+    public void setSalvageValue(double salvageValue) {
+        this.salvageValue = salvageValue;
     }
 }

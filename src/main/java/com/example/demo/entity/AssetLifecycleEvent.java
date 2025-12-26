@@ -13,7 +13,7 @@ public class AssetLifecycleEvent {
 
     private String eventType;
 
-    private String description;
+    private String eventDescription;
 
     private LocalDate eventDate;
 
@@ -39,12 +39,13 @@ public class AssetLifecycleEvent {
         this.eventType = eventType;
     }
 
-    public String getDescription() {
-        return description;
+    // ✅ REQUIRED BY SERVICES
+    public String getEventDescription() {
+        return eventDescription;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setEventDescription(String eventDescription) {
+        this.eventDescription = eventDescription;
     }
 
     public LocalDate getEventDate() {
