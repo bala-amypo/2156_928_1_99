@@ -15,7 +15,7 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
 
         Server amypoServer = new Server();
-        amypoServer.setUrl("https://9170.408procr.amypo.ai");
+        amypoServer.setUrl("https://9170.408procr.amypo.ai/");
         amypoServer.setDescription("AmyPo Gateway Server");
 
         return new OpenAPI()
