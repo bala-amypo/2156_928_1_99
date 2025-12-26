@@ -1,39 +1,61 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
 
 @Entity
-@Table(name = "asset_disposals")
 public class AssetDisposal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String status;  // Status of disposal (e.g., PENDING, APPROVED, REJECTED)
+    private String disposalMethod;
 
-    private String assetName; // Example field for asset
+    private Double disposalValue;
+
+    private LocalDate disposalDate;
+
+    private String status = "PENDING";
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    private Asset asset;
 
-    // Constructors
-    public AssetDisposal() {}
+    @ManyToOne
+    private User approvedBy;
 
-    public AssetDisposal(String assetName, String status, User user) {
-        this.assetName = assetName;
-        this.status = status;
-        this.user = user;
-    }
+    // getters and setters
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getDisposalMethod() {
+        return disposalMethod;
+    }
+
+    public void setDisposalMethod(String disposalMethod) {
+        this.disposalMethod = disposalMethod;
+    }
+
+    public Double getDisposalValue() {
+        return disposalValue;
+    }
+
+    public void setDisposalValue(Double disposalValue) {
+        this.disposalValue = disposalValue;
+    }
+
+    public LocalDate getDisposalDate() {
+        return disposalDate;
+    }
+
+    public void setDisposalDate(LocalDate disposalDate) {
+        this.disposalDate = disposalDate;
     }
 
     public String getStatus() {
@@ -44,19 +66,19 @@ public class AssetDisposal {
         this.status = status;
     }
 
-    public String getAssetName() {
-        return assetName;
+    public Asset getAsset() {
+        return asset;
     }
 
-    public void setAssetName(String assetName) {
-        this.assetName = assetName;
+    public void setAsset(Asset asset) {
+        this.asset = asset;
     }
 
-    public User getUser() {
-        return user;
+    public User getApprovedBy() {
+        return approvedBy;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setApprovedBy(User approvedBy) {
+        this.approvedBy = approvedBy;
     }
 }
