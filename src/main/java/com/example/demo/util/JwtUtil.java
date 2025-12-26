@@ -49,6 +49,12 @@ public class JwtUtil {
                 .getBody();
     }
 
+    // ✅ Needed by AuthController
+public String generateToken(String username) {
+    return generateToken(username, 0L, Set.of("ROLE_USER"));
+}
+
+
     public boolean validateToken(String token) {
         try {
             getClaims(token);

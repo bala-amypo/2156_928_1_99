@@ -1,25 +1,41 @@
 package com.example.demo.entity;
 
-import java.time.LocalDate;
 import jakarta.persistence.*;
+import java.time.LocalDate;
+import java.util.List;
 
 @Entity
+@Table(name = "assets")
 public class Asset {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;          // NOT assetName
+    @Column(unique = true, nullable = false)
+    private String assetTag;
+
+    private String assetName;
+
     private LocalDate purchaseDate;
-    private double cost;
-    private String status;
+
+    private double purchaseCost;
+
+    private String status = "ACTIVE";
 
     @ManyToOne
     @JoinColumn(name = "vendor_id")
     private Vendor vendor;
 
-    // getters and setters
+    @ManyToOne
+    @JoinColumn(name = "rule_id")
+    private DepreciationRule depreciationRule;
+
+    @OneToMany(mappedBy = "asset")
+    private List<AssetLifecycleEvent> lifecycleEvents;
+
+    // ===== Getters & Setters =====
+
     public Long getId() {
         return id;
     }
@@ -28,12 +44,20 @@ public class Asset {
         this.id = id;
     }
 
-    public String getName() {     // NOT getAssetName()
-        return name;
+    public String getAssetTag() {
+        return assetTag;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAssetTag(String assetTag) {
+        this.assetTag = assetTag;
+    }
+
+    public String getAssetName() {
+        return assetName;
+    }
+
+    public void setAssetName(String assetName) {
+        this.assetName = assetName;
     }
 
     public LocalDate getPurchaseDate() {
@@ -44,12 +68,12 @@ public class Asset {
         this.purchaseDate = purchaseDate;
     }
 
-    public double getCost() {
-        return cost;
+    public double getPurchaseCost() {
+        return purchaseCost;
     }
 
-    public void setCost(double cost) {
-        this.cost = cost;
+    public void setPurchaseCost(double purchaseCost) {
+        this.purchaseCost = purchaseCost;
     }
 
     public String getStatus() {
@@ -66,5 +90,21 @@ public class Asset {
 
     public void setVendor(Vendor vendor) {
         this.vendor = vendor;
+    }
+
+    public DepreciationRule getDepreciationRule() {
+        return depreciationRule;
+    }
+
+    public void setDepreciationRule(DepreciationRule depreciationRule) {
+        this.depreciationRule = depreciationRule;
+    }
+
+    public List<AssetLifecycleEvent> getLifecycleEvents() {
+        return lifecycleEvents;
+    }
+
+    public void setLifecycleEvents(List<AssetLifecycleEvent> lifecycleEvents) {
+        this.lifecycleEvents = lifecycleEvents;
     }
 }
