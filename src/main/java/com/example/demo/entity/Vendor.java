@@ -1,17 +1,26 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
+@Table(name = "vendors")
 public class Vendor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;   // IMPORTANT: field name is "name"
+    @Column(unique = true, nullable = false)
+    private String vendorName;
 
-    // getters and setters
+    private String contactEmail;
+
+    @OneToMany(mappedBy = "vendor")
+    private List<Asset> assets;
+
+    // ===== Getters & Setters =====
+
     public Long getId() {
         return id;
     }
@@ -20,11 +29,27 @@ public class Vendor {
         this.id = id;
     }
 
-    public String getName() {      // NOT getVendorName()
-        return name;
+    public String getVendorName() {
+        return vendorName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setVendorName(String vendorName) {
+        this.vendorName = vendorName;
+    }
+
+    public String getContactEmail() {
+        return contactEmail;
+    }
+
+    public void setContactEmail(String contactEmail) {
+        this.contactEmail = contactEmail;
+    }
+
+    public List<Asset> getAssets() {
+        return assets;
+    }
+
+    public void setAssets(List<Asset> assets) {
+        this.assets = assets;
     }
 }

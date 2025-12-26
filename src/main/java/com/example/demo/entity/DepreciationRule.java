@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "depreciation_rules")
@@ -10,17 +11,13 @@ public class DepreciationRule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String assetType;
+    @Column(unique = true, nullable = false)
+    private String ruleName;
 
-    @Column(nullable = false)
-    private double rate;
+    private String method;
 
-    @Column(nullable = false)
-    private int usefulLifeYears;
-
-    @Column(nullable = false)
-    private double salvageValue;
+    @OneToMany(mappedBy = "depreciationRule")
+    private List<Asset> assets;
 
     // ===== Getters & Setters =====
 
@@ -32,35 +29,27 @@ public class DepreciationRule {
         this.id = id;
     }
 
-    public String getAssetType() {
-        return assetType;
+    public String getRuleName() {
+        return ruleName;
     }
 
-    public void setAssetType(String assetType) {
-        this.assetType = assetType;
+    public void setRuleName(String ruleName) {
+        this.ruleName = ruleName;
     }
 
-    public double getRate() {
-        return rate;
+    public String getMethod() {
+        return method;
     }
 
-    public void setRate(double rate) {
-        this.rate = rate;
+    public void setMethod(String method) {
+        this.method = method;
     }
 
-    public int getUsefulLifeYears() {
-        return usefulLifeYears;
+    public List<Asset> getAssets() {
+        return assets;
     }
 
-    public void setUsefulLifeYears(int usefulLifeYears) {
-        this.usefulLifeYears = usefulLifeYears;
-    }
-
-    public double getSalvageValue() {
-        return salvageValue;
-    }
-
-    public void setSalvageValue(double salvageValue) {
-        this.salvageValue = salvageValue;
+    public void setAssets(List<Asset> assets) {
+        this.assets = assets;
     }
 }
