@@ -12,6 +12,8 @@ public class AssetDisposal {
 
     private LocalDate disposalDate;
     private boolean approved;
+    private String disposalMethod;
+    private double disposalValue;
 
     @ManyToOne
     private Asset asset;
@@ -43,6 +45,22 @@ public class AssetDisposal {
  
     public void setApproved(boolean approved) {
         this.approved = approved;
+    }
+
+    public String getDisposalMethod() {
+        return disposalMethod;
+    }
+
+    public void setDisposalMethod(String disposalMethod) {
+        this.disposalMethod = disposalMethod;
+    }
+
+    public double getDisposalValue() {
+        return disposalValue;
+    }
+
+    public void setDisposalValue(double disposalValue) {
+        this.disposalValue = disposalValue;
     }
  
     public Asset getAsset() {

@@ -12,6 +12,9 @@ public class DepreciationRule {
     private String assetType;
     private double rate;
     private double salvageValue;
+    private String ruleName;
+    private String method;
+    private int usefulLifeYears;
 
     // ===== GETTERS & SETTERS =====
 
@@ -31,6 +34,18 @@ public class DepreciationRule {
         return salvageValue;
     }
 
+    public String getRuleName() {
+        return ruleName;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public int getUsefulLifeYears() {
+        return usefulLifeYears;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -45,5 +60,17 @@ public class DepreciationRule {
 
     public void setSalvageValue(double salvageValue) {
         this.salvageValue = salvageValue;
+    }
+
+    public void setRuleName(String ruleName) {
+        this.ruleName = ruleName;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
+
+    public void setUsefulLifeYears(int usefulLifeYears) {
+        this.usefulLifeYears = usefulLifeYears;
     }
 }
