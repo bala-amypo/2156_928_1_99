@@ -1,26 +1,24 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.DepreciationRule;
-import com.example.demo.repository.DepreciationRuleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.example.demo.entity.DepreciationRule;
+import com.example.demo.repository.DepreciationRuleRepository;
 
 @Service
 public class DepreciationRuleService {
 
     @Autowired
-    private DepreciationRuleRepository ruleRepository;
+    private DepreciationRuleRepository repository;
 
-    public DepreciationRule save(DepreciationRule rule) {
+    public DepreciationRule saveRule(DepreciationRule rule) {
+        return repository.save(rule);
+    }
 
-        if (rule.getUsefulLifeYears() <= 0) {
-            throw new RuntimeException("Useful life must be positive");
-        }
-
-        if (rule.getSalvageValue() < 0) {
-            throw new RuntimeException("Salvage value cannot be negative");
-        }
-
-        return ruleRepository.save(rule);
+    public double getSalvageValueByType(String assetType) {
+        DepreciationRule rule = repository.findByAssetType(assetType)
+                .orElseThrow(() -> new RuntimeException("Rule not found"));
+        return rule.getSalvageValue();
     }
 }
