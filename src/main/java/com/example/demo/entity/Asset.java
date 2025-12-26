@@ -4,21 +4,16 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "assets", uniqueConstraints = @UniqueConstraint(columnNames = "assetTag"))
 public class Asset {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String assetTag;
-
-    private String assetName;
-    private LocalDate purchaseDate;
+    private String name;
     private double purchaseCost;
-
-    private String status = "ACTIVE";
+    private LocalDate purchaseDate;
+    private String status;
 
     @ManyToOne
     private Vendor vendor;
@@ -26,5 +21,61 @@ public class Asset {
     @ManyToOne
     private DepreciationRule depreciationRule;
 
-    // getters & setters
+    // Getters and Setters
+
+    public Long getId() {
+        return id;
+    }
+ 
+    public void setId(Long id) {
+        this.id = id;
+    }
+ 
+    public String getName() {
+        return name;
+    }
+ 
+    public void setName(String name) {
+        this.name = name;
+    }
+ 
+    public double getPurchaseCost() {
+        return purchaseCost;
+    }
+ 
+    public void setPurchaseCost(double purchaseCost) {
+        this.purchaseCost = purchaseCost;
+    }
+ 
+    public LocalDate getPurchaseDate() {
+        return purchaseDate;
+    }
+ 
+    public void setPurchaseDate(LocalDate purchaseDate) {
+        this.purchaseDate = purchaseDate;
+    }
+ 
+    public String getStatus() {
+        return status;
+    }
+ 
+    public void setStatus(String status) {
+        this.status = status;
+    }
+ 
+    public Vendor getVendor() {
+        return vendor;
+    }
+ 
+    public void setVendor(Vendor vendor) {
+        this.vendor = vendor;
+    }
+ 
+    public DepreciationRule getDepreciationRule() {
+        return depreciationRule;
+    }
+ 
+    public void setDepreciationRule(DepreciationRule depreciationRule) {
+        this.depreciationRule = depreciationRule;
+    }
 }

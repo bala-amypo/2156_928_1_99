@@ -1,41 +1,42 @@
 package com.example.demo.util;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.security.Key;
+import java.util.Date;
 
 @Component
 public class JwtUtil {
 
-    private final String SECRET = "secretkey123456secretkey123456";
+    @Value("${jwt.secret}")
+    private String secret;
 
-    public String generateToken(String email, Long userId, Set<String> roles) {
+    private final long EXPIRATION = 1000 * 60 * 60;
+
+    private Key getSigningKey() {
+        return Keys.hmacShaKeyFor(secret.getBytes());
+    }
+
+    public String generateToken(String username) {
         return Jwts.builder()
-                .claim("email", email)
-                .claim("userId", userId)
-                .claim("roles", roles)
+                .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 86400000))
-                .signWith(Keys.hmacShaKeyFor(SECRET.getBytes()), SignatureAlgorithm.HS256)
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public Claims getClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(SECRET.getBytes())
+    public String extractUsername(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-    }
-
-    public boolean validateToken(String token) {
-        try {
-            getClaims(token);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        return claims.getSubject();
     }
 }

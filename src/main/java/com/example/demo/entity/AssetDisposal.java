@@ -10,9 +10,8 @@ public class AssetDisposal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String disposalMethod;
-    private double disposalValue;
     private LocalDate disposalDate;
+    private boolean approved;
 
     @ManyToOne
     private Asset asset;
@@ -20,5 +19,45 @@ public class AssetDisposal {
     @ManyToOne
     private User approvedBy;
 
-    // getters & setters
+    // Getters and Setters
+
+    public Long getId() {
+        return id;
+    }
+ 
+    public void setId(Long id) {
+        this.id = id;
+    }
+ 
+    public LocalDate getDisposalDate() {
+        return disposalDate;
+    }
+ 
+    public void setDisposalDate(LocalDate disposalDate) {
+        this.disposalDate = disposalDate;
+    }
+ 
+    public boolean isApproved() {
+        return approved;
+    }
+ 
+    public void setApproved(boolean approved) {
+        this.approved = approved;
+    }
+ 
+    public Asset getAsset() {
+        return asset;
+    }
+ 
+    public void setAsset(Asset asset) {
+        this.asset = asset;
+    }
+ 
+    public User getApprovedBy() {
+        return approvedBy;
+    }
+ 
+    public void setApprovedBy(User approvedBy) {
+        this.approvedBy = approvedBy;
+    }
 }

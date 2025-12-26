@@ -3,19 +3,38 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "depreciation_rules", uniqueConstraints = @UniqueConstraint(columnNames = "ruleName"))
 public class DepreciationRule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String ruleName;
-
-    private String method;
     private int usefulLifeYears;
     private double salvageValue;
 
-    // getters & setters
+    // Getters and Setters
+
+    public Long getId() {
+        return id;
+    }
+ 
+    public void setId(Long id) {
+        this.id = id;
+    }
+ 
+    public int getUsefulLifeYears() {
+        return usefulLifeYears;
+    }
+ 
+    public void setUsefulLifeYears(int usefulLifeYears) {
+        this.usefulLifeYears = usefulLifeYears;
+    }
+ 
+    public double getSalvageValue() {
+        return salvageValue;
+    }
+ 
+    public void setSalvageValue(double salvageValue) {
+        this.salvageValue = salvageValue;
+    }
 }
