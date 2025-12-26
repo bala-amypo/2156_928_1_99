@@ -21,6 +21,7 @@ public class AssetController {
     @Autowired
     private VendorRepository vendorRepository;
 
+    // CREATE ASSET
     @PostMapping
     public Asset createAsset(@RequestBody Asset asset) {
 
@@ -34,11 +35,13 @@ public class AssetController {
         return assetRepository.save(asset);
     }
 
+    // GET ALL ASSETS
     @GetMapping
     public List<Asset> getAllAssets() {
         return assetRepository.findAll();
     }
 
+    // UPDATE ASSET
     @PutMapping("/{id}")
     public Asset updateAsset(@PathVariable Long id,
                              @RequestBody Asset updatedAsset) {
@@ -51,12 +54,21 @@ public class AssetController {
         asset.setCost(updatedAsset.getCost());
         asset.setStatus(updatedAsset.getStatus());
 
+        // Update vendor if provided
+        if (updatedAsset.getVendor() != null && updatedAsset.getVendor().getName() != null) {
+            Vendor vendor = vendorRepository
+                    .findByName(updatedAsset.getVendor().getName())
+                    .orElseThrow(() -> new RuntimeException("Vendor not found"));
+            asset.setVendor(vendor);
+        }
+
         return assetRepository.save(asset);
     }
 
+    // DELETE ASSET
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteAsset(@PathVariable Long id) {
         assetRepository.deleteById(id);
-        return ResponseEntity.ok("Asset deleted");
+        return ResponseEntity.ok("Asset deleted successfully");
     }
 }
