@@ -1,7 +1,6 @@
 package com.example.demo.util;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -11,8 +10,8 @@ import java.util.Set;
 @Component
 public class JwtUtil {
 
-    @Value("${jwt.secret:defaultSecretKeyForDevelopmentOnly123456789}")
-    private String secretKey;
+    @Value("${jwt.secret}")
+    private String secret;
 
     public String generateToken(String email, Long userId, Set<String> roles) {
         return Jwts.builder()
@@ -20,8 +19,8 @@ public class JwtUtil {
                 .claim("userId", userId)
                 .claim("roles", roles)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .setExpiration(new Date(System.currentTimeMillis() + 86400000))
+                .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
 }
