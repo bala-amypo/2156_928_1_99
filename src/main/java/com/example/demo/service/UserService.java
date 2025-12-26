@@ -11,29 +11,22 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-    @Autowired private UserRepository userRepository;
-    @Autowired private RoleRepository roleRepository;
-    @Autowired private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserRepository userRepository;
 
-    public User registerUser(User user) {
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    public User registerUser(User user, String roleName) {
+        Role role = roleRepository.findByName(roleName)
+                .orElseGet(() -> roleRepository.save(new Role(roleName)));
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        Role role = roleRepository.findByName("USER")
-                .orElseGet(() -> roleRepository.save(new Role("USER")));
-
         user.getRoles().add(role);
 
         return userRepository.save(user);
-    }
-
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-    }
-
-    public User findById(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }

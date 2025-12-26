@@ -1,7 +1,6 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.util.Set;
 
 @Entity
 @Table(name = "roles")
@@ -14,14 +13,8 @@ public class Role {
     @Column(unique = true, nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
+    public Role() {}
 
-    // REQUIRED by JPA
-    public Role() {
-    }
-
-    // REQUIRED by your test cases
     public Role(String name) {
         this.name = name;
     }
