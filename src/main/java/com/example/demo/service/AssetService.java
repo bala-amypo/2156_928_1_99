@@ -2,13 +2,12 @@ package com.example.demo.service;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Asset;
-import com.example.demo.entity.DepreciationRuleEntity;
+import com.example.demo.entity.DepreciationRule;
 import com.example.demo.repository.AssetRepository;
 import com.example.demo.repository.DepreciationRuleRepository;
 
@@ -21,24 +20,12 @@ public class AssetService {
     @Autowired
     private DepreciationRuleRepository depreciationRuleRepository;
 
-    public Asset saveAsset(Asset asset) {
-        return assetRepository.save(asset);
-    }
-
-    public List<Asset> getAllAssets() {
-        return assetRepository.findAll();
-    }
-
-    public Asset getAssetById(Long id) {
-        return assetRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Asset not found"));
-    }
-
     public double calculateCurrentValue(Long assetId) {
 
-        Asset asset = getAssetById(assetId);
+        Asset asset = assetRepository.findById(assetId)
+                .orElseThrow(() -> new RuntimeException("Asset not found"));
 
-        DepreciationRuleEntity rule = depreciationRuleRepository
+        DepreciationRule rule = depreciationRuleRepository
                 .findByAssetType(asset.getName())
                 .orElseThrow(() -> new RuntimeException("Depreciation rule not found"));
 
@@ -47,11 +34,9 @@ public class AssetService {
                 LocalDate.now()
         );
 
-        double depreciationAmount =
-                asset.getCost() * rule.getDepreciationRate() * yearsUsed;
+        double depreciation = asset.getCost() * rule.getRate() * yearsUsed;
+        double currentValue = asset.getCost() - depreciation;
 
-        double currentValue = asset.getCost() - depreciationAmount;
-
-        return Math.max(currentValue, 0);
+        return Math.max(currentValue, rule.getSalvageValue());
     }
 }
