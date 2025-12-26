@@ -1,40 +1,49 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Asset;
-import com.example.demo.entity.AssetLifecycleEvent;
-import com.example.demo.repository.AssetLifecycleEventRepository;
+import com.example.demo.entity.AssetDisposal;
+import com.example.demo.entity.User;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.repository.AssetDisposalRepository;
 import com.example.demo.repository.AssetRepository;
+import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.List;
-
 @Service
-public class AssetLifecycleEventService {
+public class AssetDisposalServiceImpl implements AssetDisposalService {
 
-    @Autowired private AssetLifecycleEventRepository eventRepository;
-    @Autowired private AssetRepository assetRepository;
+    @Autowired
+    private AssetDisposalRepository assetDisposalRepository;
 
-    public AssetLifecycleEvent logEvent(Long assetId, AssetLifecycleEvent event) {
+    @Autowired
+    private AssetRepository assetRepository;
 
-        if (event.getEventDate().isAfter(LocalDate.now())) {
-            throw new RuntimeException("Event date cannot be in future");
-        }
+    @Autowired
+    private UserRepository userRepository;
 
-        if (event.getEventDescription() == null || event.getEventDescription().isEmpty()) {
-            throw new RuntimeException("Event description required");
-        }
-
+    @Override
+    public AssetDisposal requestDisposal(Long assetId, AssetDisposal disposal) {
         Asset asset = assetRepository.findById(assetId)
-                .orElseThrow(() -> new RuntimeException("Asset not found"));
-
-        event.setAsset(asset);
-
-        return eventRepository.save(event);
+                .orElseThrow(() -> new ResourceNotFoundException("Asset not found"));
+        
+        disposal.setAsset(asset);
+        disposal.setApproved(false);
+        
+        return assetDisposalRepository.save(disposal);
     }
 
-    public List<AssetLifecycleEvent> getEvents(Long assetId) {
-        return eventRepository.findByAssetIdOrderByEventDateDesc(assetId);
+    @Override
+    public AssetDisposal approveDisposal(Long disposalId, String approverEmail) {
+        AssetDisposal disposal = assetDisposalRepository.findById(disposalId)
+                .orElseThrow(() -> new ResourceNotFoundException("Disposal request not found"));
+        
+        User approver = userRepository.findByEmail(approverEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("Approver not found"));
+        
+        disposal.setApproved(true);
+        disposal.setApprovedBy(approver);
+        
+        return assetDisposalRepository.save(disposal);
     }
 }
