@@ -1,32 +1,13 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Vendor;
-import com.example.demo.repository.VendorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 
-@Service
-public class VendorService {
+public interface VendorService {
 
-    @Autowired
-    private VendorRepository vendorRepository;
+    Vendor createVendor(Vendor vendor);
 
-    public Vendor save(Vendor vendor) {
-        return vendorRepository.save(vendor);
-    }
+    List<Vendor> getAllVendors();
 
-    public List<Vendor> findAll() {
-        return vendorRepository.findAll();
-    }
-
-    public Vendor findById(Long id) {
-        return vendorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Vendor not found"));
-    }
-
-    public void delete(Long id) {
-        vendorRepository.deleteById(id);
-    }
+    Vendor getVendorById(Long id);
 }

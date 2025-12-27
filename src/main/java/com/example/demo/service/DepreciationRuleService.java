@@ -1,24 +1,13 @@
 package com.example.demo.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.example.demo.entity.DepreciationRule;
-import com.example.demo.repository.DepreciationRuleRepository;
+import java.util.List;
 
-@Service
-public class DepreciationRuleService {
+public interface DepreciationRuleService {
 
-    @Autowired
-    private DepreciationRuleRepository repository;
+    DepreciationRule createRule(DepreciationRule rule);
 
-    public DepreciationRule saveRule(DepreciationRule rule) {
-        return repository.save(rule);
-    }
+    List<DepreciationRule> getAllRules();
 
-    public double getSalvageValueByType(String assetType) {
-        DepreciationRule rule = repository.findByAssetType(assetType)
-                .orElseThrow(() -> new RuntimeException("Rule not found"));
-        return rule.getSalvageValue();
-    }
+    DepreciationRule getRuleById(Long id);
 }

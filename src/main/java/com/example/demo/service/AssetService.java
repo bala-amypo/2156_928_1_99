@@ -1,42 +1,15 @@
 package com.example.demo.service;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.example.demo.entity.Asset;
-import com.example.demo.entity.DepreciationRule;
-import com.example.demo.repository.AssetRepository;
-import com.example.demo.repository.DepreciationRuleRepository;
+import java.util.List;
 
-@Service
-public class AssetService {
+public interface AssetService {
 
-    @Autowired
-    private AssetRepository assetRepository;
+    Asset createAsset(Long vendorId, Long ruleId, Asset asset);
 
-    @Autowired
-    private DepreciationRuleRepository depreciationRuleRepository;
+    List<Asset> getAllAssets();
 
-    public double calculateCurrentValue(Long assetId) {
+    Asset getAssetById(Long id);
 
-        Asset asset = assetRepository.findById(assetId)
-                .orElseThrow(() -> new RuntimeException("Asset not found"));
-
-        DepreciationRule rule = depreciationRuleRepository
-                .findByAssetType(asset.getName())
-                .orElseThrow(() -> new RuntimeException("Depreciation rule not found"));
-
-        long yearsUsed = ChronoUnit.YEARS.between(
-                asset.getPurchaseDate(),
-                LocalDate.now()
-        );
-
-        double depreciation = asset.getCost() * rule.getRate() * yearsUsed;
-        double currentValue = asset.getCost() - depreciation;
-
-        return Math.max(currentValue, rule.getSalvageValue());
-    }
+    List<Asset> getAssetsByStatus(String status);
 }

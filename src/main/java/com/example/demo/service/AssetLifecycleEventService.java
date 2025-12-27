@@ -1,40 +1,11 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.Asset;
 import com.example.demo.entity.AssetLifecycleEvent;
-import com.example.demo.repository.AssetLifecycleEventRepository;
-import com.example.demo.repository.AssetRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
 import java.util.List;
 
-@Service
-public class AssetLifecycleEventService {
+public interface AssetLifecycleEventService {
 
-    @Autowired private AssetLifecycleEventRepository eventRepository;
-    @Autowired private AssetRepository assetRepository;
+    AssetLifecycleEvent logEvent(Long assetId, AssetLifecycleEvent event);
 
-    public AssetLifecycleEvent logEvent(Long assetId, AssetLifecycleEvent event) {
-
-        if (event.getEventDate().isAfter(LocalDate.now())) {
-            throw new RuntimeException("Event date cannot be in future");
-        }
-
-        if (event.getEventDescription() == null || event.getEventDescription().isEmpty()) {
-            throw new RuntimeException("Event description required");
-        }
-
-        Asset asset = assetRepository.findById(assetId)
-                .orElseThrow(() -> new RuntimeException("Asset not found"));
-
-        event.setAsset(asset);
-
-        return eventRepository.save(event);
-    }
-
-    public List<AssetLifecycleEvent> getEvents(Long assetId) {
-        return eventRepository.findByAssetIdOrderByEventDateDesc(assetId);
-    }
+    List<AssetLifecycleEvent> getEventsByAsset(Long assetId);
 }
