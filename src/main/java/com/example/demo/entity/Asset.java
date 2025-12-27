@@ -4,21 +4,31 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@Table(
+    name = "asset",
+    uniqueConstraints = @UniqueConstraint(columnNames = "asset_tag")
+)
 public class Asset {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-    private String assetType;
-    private double cost;
-    private String status;
+    @Column(name = "asset_tag", nullable = false)
     private String assetTag;
+
+    @Column(name = "asset_name")
     private String assetName;
+
+    private String assetType;
+
+    @Column(name = "purchase_cost")
     private double purchaseCost;
 
+    @Column(name = "purchase_date")
     private LocalDate purchaseDate;
+
+    private String status;
 
     @ManyToOne
     @JoinColumn(name = "vendor_id")
@@ -28,92 +38,34 @@ public class Asset {
     @JoinColumn(name = "depreciation_rule_id")
     private DepreciationRule depreciationRule;
 
-    // ===== GETTERS & SETTERS =====
+    public Asset() {}
 
-    public Long getId() {
-        return id;
-    }
+    // getters & setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public String getName() {
-        return name;
-    }
+    public String getAssetTag() { return assetTag; }
+    public void setAssetTag(String assetTag) { this.assetTag = assetTag; }
 
-    public String getAssetType() {
-        return assetType;
-    }
+    public String getAssetName() { return assetName; }
+    public void setAssetName(String assetName) { this.assetName = assetName; }
 
-    public double getCost() {
-        return cost;
-    }
+    public String getAssetType() { return assetType; }
+    public void setAssetType(String assetType) { this.assetType = assetType; }
 
-    public String getStatus() {
-        return status;
-    }
+    public double getPurchaseCost() { return purchaseCost; }
+    public void setPurchaseCost(double purchaseCost) { this.purchaseCost = purchaseCost; }
 
-    public String getAssetTag() {
-        return assetTag;
-    }
+    public LocalDate getPurchaseDate() { return purchaseDate; }
+    public void setPurchaseDate(LocalDate purchaseDate) { this.purchaseDate = purchaseDate; }
 
-    public String getAssetName() {
-        return assetName;
-    }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
-    public double getPurchaseCost() {
-        return purchaseCost;
-    }
+    public Vendor getVendor() { return vendor; }
+    public void setVendor(Vendor vendor) { this.vendor = vendor; }
 
-    public LocalDate getPurchaseDate() {
-        return purchaseDate;
-    }
-
-    public Vendor getVendor() {
-        return vendor;
-    }
-
-    public DepreciationRule getDepreciationRule() {
-        return depreciationRule;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setAssetType(String assetType) {
-        this.assetType = assetType;
-    }
-
-    public void setCost(double cost) {
-        this.cost = cost;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public void setAssetTag(String assetTag) {
-        this.assetTag = assetTag;
-    }
-
-    public void setAssetName(String assetName) {
-        this.assetName = assetName;
-    }
-
-    public void setPurchaseCost(double purchaseCost) {
-        this.purchaseCost = purchaseCost;
-    }
-
-    public void setPurchaseDate(LocalDate purchaseDate) {
-        this.purchaseDate = purchaseDate;
-    }
-
-    public void setVendor(Vendor vendor) {
-        this.vendor = vendor;
-    }
-
+    public DepreciationRule getDepreciationRule() { return depreciationRule; }
     public void setDepreciationRule(DepreciationRule depreciationRule) {
         this.depreciationRule = depreciationRule;
     }

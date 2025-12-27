@@ -13,54 +13,32 @@ public class AssetLifecycleEvent {
 
     private String eventType;
 
+    @Column(name = "event_description")
     private String eventDescription;
 
+    @Column(name = "event_date")
     private LocalDate eventDate;
 
     @ManyToOne
     @JoinColumn(name = "asset_id")
     private Asset asset;
 
-    // ===== Getters & Setters =====
+    public AssetLifecycleEvent() {}
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getEventType() { return eventType; }
+    public void setEventType(String eventType) { this.eventType = eventType; }
 
-    public String getEventType() {
-        return eventType;
-    }
-
-    public void setEventType(String eventType) {
-        this.eventType = eventType;
-    }
-
-    // ✅ REQUIRED BY SERVICES
-    public String getEventDescription() {
-        return eventDescription;
-    }
-
+    public String getEventDescription() { return eventDescription; }
     public void setEventDescription(String eventDescription) {
         this.eventDescription = eventDescription;
     }
 
-    public LocalDate getEventDate() {
-        return eventDate;
-    }
+    public LocalDate getEventDate() { return eventDate; }
+    public void setEventDate(LocalDate eventDate) { this.eventDate = eventDate; }
 
-    public void setEventDate(LocalDate eventDate) {
-        this.eventDate = eventDate;
-    }
-
-    public Asset getAsset() {
-        return asset;
-    }
-
-    public void setAsset(Asset asset) {
-        this.asset = asset;
-    }
+    public Asset getAsset() { return asset; }
+    public void setAsset(Asset asset) { this.asset = asset; }
 }
