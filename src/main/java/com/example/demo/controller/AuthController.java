@@ -1,3 +1,5 @@
+AuthController.java
+
 package com.example.demo.controller;
 import com.example.demo.dto.*;
 import com.example.demo.entity.User;
@@ -8,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
