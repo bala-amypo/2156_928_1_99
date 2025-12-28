@@ -23,17 +23,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User registerUser(User user, String roleName) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
         Role role = roleRepository.findByName(roleName)
                 .orElseGet(() -> roleRepository.save(new Role(roleName)));
 
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.getRoles().add(role);
+
         return userRepository.save(user);
     }
 
     @Override
     public User findByEmail(String email) {
-        return userRepository.findByEmail(email).orElse(null);
+        return userRepository.findByEmail(email).orElseThrow();
     }
 }
