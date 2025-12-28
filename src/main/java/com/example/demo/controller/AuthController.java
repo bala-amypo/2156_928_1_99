@@ -1,56 +1,52 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.User;
-import com.example.demo.service.UserService;
-import com.example.demo.util.JwtUtil;
+import com.example.demo.entity.Asset;
+import com.example.demo.service.AssetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import java.util.List;
 
 @RestController
-@RequestMapping("/auth")
-public class AuthController {
+@RequestMapping("/assets")
+public class AssetController {
 
     @Autowired
-    private UserService userService;
+    private AssetService assetService;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    // ✅ MUST MATCH SERVICE SIGNATURE
+    @PostMapping
+    public ResponseEntity<Asset> createAsset(
+            @RequestParam Long vendorId,
+            @RequestParam Long ruleId,
+            @RequestBody Asset asset) {
 
-    @Autowired
-    private JwtUtil jwtUtil;
-
-    // ✅ REGISTER
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User user,
-                                      @RequestParam String role) {
-        return ResponseEntity.ok(userService.registerUser(user, role));
+        return ResponseEntity.ok(
+                assetService.createAsset(vendorId, ruleId, asset)
+        );
     }
 
-    // ✅ LOGIN
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> request) {
+    @PutMapping("/{id}")
+    public ResponseEntity<Asset> updateAsset(
+            @PathVariable Long id,
+            @RequestBody Asset asset) {
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.get("email"),
-                        request.get("password")
-                )
-        );
+        return ResponseEntity.ok(assetService.updateAsset(id, asset));
+    }
 
-        User user = userService.findByEmail(request.get("email"));
+    @GetMapping
+    public ResponseEntity<List<Asset>> getAllAssets() {
+        return ResponseEntity.ok(assetService.getAllAssets());
+    }
 
-        String token = jwtUtil.generateToken(
-                user.getEmail(),
-                user.getId(),
-                user.getRolesAsStringSet()
-        );
+    @GetMapping("/{id}")
+    public ResponseEntity<Asset> getAssetById(@PathVariable Long id) {
+        return ResponseEntity.ok(assetService.getAssetById(id));
+    }
 
-        return ResponseEntity.ok(Map.of("token", token));
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<Asset>> getAssetsByStatus(@PathVariable String status) {
+        return ResponseEntity.ok(assetService.getAssetsByStatus(status));
     }
 }
