@@ -1,48 +1,38 @@
-package com.example.demo.controller;
+package com.example.demo.entity;
 
-import com.example.demo.entity.Asset;
-import com.example.demo.service.AssetService;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import jakarta.persistence.*;
 
-import java.util.List;
+@Entity
+@Table(name = "roles")
+public class Role {
 
-@RestController
-@RequestMapping("/api/assets")
-@Tag(name = "Assets")
-public class AssetController {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private final AssetService assetService;
+    @Column(unique = true, nullable = false)
+    private String name;
 
-    public AssetController(AssetService assetService) {
-        this.assetService = assetService;
+    public Role() {}
+
+    public Role(String name) {
+        this.name = name;
     }
 
-    // POST /api/assets/{vendorId}/{ruleId}
-    @PostMapping("/{vendorId}/{ruleId}")
-    public ResponseEntity<Asset> createAsset(
-            @PathVariable Long vendorId,
-            @PathVariable Long ruleId,
-            @RequestBody Asset asset) {
-        return ResponseEntity.ok(assetService.createAsset(vendorId, ruleId, asset));
+    // getters & setters
+    public Long getId() {
+        return id;
     }
 
-    // GET /api/assets
-    @GetMapping
-    public ResponseEntity<List<Asset>> getAllAssets() {
-        return ResponseEntity.ok(assetService.getAllAssets());
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    // GET /api/assets/status/{status}
-    @GetMapping("/status/{status}")
-    public ResponseEntity<List<Asset>> getAssetsByStatus(@PathVariable String status) {
-        return ResponseEntity.ok(assetService.getAssetsByStatus(status));
+    public String getName() {
+        return name;
     }
 
-    // GET /api/assets/{id}
-    @GetMapping("/{id}")
-    public ResponseEntity<Asset> getAssetById(@PathVariable Long id) {
-        return ResponseEntity.ok(assetService.getAssetById(id));
+    public void setName(String name) {
+        this.name = name;
     }
 }
